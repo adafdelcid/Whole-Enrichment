@@ -12,7 +12,7 @@ Complete enrichment analysis, by sample, cell type and organ
 	* renormalization
 	* enrichment calculations
 
-  * front-end:
-  * tkinter gui
-  * select if user wants outliers removed
-  * print out outliers removed (barcodes and mice sample names)
+  	* front-end:
+  	* tkinter gui
+  	* select if user wants outliers removed
+  	* print out outliers removed (barcodes and mice sample names)
