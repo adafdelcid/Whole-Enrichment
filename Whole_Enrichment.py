@@ -34,78 +34,72 @@ def run_enrichment_analysis(destination_folder, formulations_sheet, csv_filepath
     df_norm_counts = create_df_norm_counts(csv_filepath, destination_file)
 
     # Merge dataframes
-    df_merged = merge_formulations_and_norm_counts(df_formulations, df_norm_counts, destination_file,\
-sorted_cells, True)
+    df_merged = merge_formulations_and_norm_counts(df_formulations, df_norm_counts, destination_file, "Formulations + norm counts")
 
 
 
-def get_n_percentile(df_norm_counts, percentile):
-    '''
-    get_n_percentile : finds value at given percentile from all data
-        inputs:
-            df_norm_counts :  data frame of normalized counts
-            percentile : percentile of values accepted (default = 99.9%)
-        output:
-            n_at_percentile : value at given percentile
-    '''
-    return np.percentile(df_norm_counts.to_numpy(), percentile)
-
-def merge_formulations_and_norm_counts(df_formulations, df_norm_counts, destination_file,\
-sorted_cells, add_to_excel=False): # pylint: disable=R1710
+def avg_cell_type(df_merged, sorted_cells):
     '''
     merge_formulations_and_norm_counts : merges formulation and norm count dataframes into single
     data frame and appends it to excel spreadsheet named "Formulations + Norm Counts"
         inputs:
-            df_formulations : formulations datasheet
-            df_norm_counts : data frame of normalized counts
-            organized_columns : list of samples organized by cell types of sorted cells
-            destination_file : directory of the excel spreadsheet created
+            df_merged : formulations datasheet
+            sorted_cells : data frame of normalized counts
         output:
             df_merged : dataframe of merged formulations and normalized counts
     '''
 
-    organized_columns = organize_cell_type(df_norm_counts, sorted_cells)
+
+
+def merge_formulations_and_norm_counts(df_one, df_two, destination_file = '', s_name=''): # pylint: disable=R1710
+    '''
+    merge_formulations_and_norm_counts : merges formulation and norm count dataframes into single
+    data frame and appends it to excel spreadsheet named "Formulations + Norm Counts"
+        inputs:
+            df_one : first data frame containing formulations
+            df_two : second data frame containing norm counts
+            destination_file : directory of the excel spreadsheet created
+            s_name = name of sheet
+        output:
+            None, if no destination file and s_name given
+            OR
+            df_merged : dataframe of merged formulations and normalized counts
+    '''
+    organized_columns = organize_cell_type(df_two) 
 
     # inner merge of data frames around barcodes ("BC")
-    df_merged = df_formulations.merge(df_norm_counts, on="BC")
+    df_merged = df_one.merge(df_two, on="BC")
 
     # ordered columns
-    l1 = df_merged.columns.tolist()[:11] # columns up to phospholipid%
+    l1 = df_one.columns.tolist() # columns up to phospholipid%
     order_columns = l1 + organized_columns # formulation columns and organized sample columns
 
     # rearrange columns on df_merged
     df_merged = df_merged[order_columns]
+    #print(df_merged.columns)
 
-    if add_to_excel:
+    if destination_file != '':
         # append merged data frames onto spreadsheet on sheet named Formulations + Norm Counts
         # with outliers
         with pd.ExcelWriter(destination_file, engine="openpyxl", mode="w")\
         as writer: # pylint: disable=abstract-class-instantiated
-            df_merged.to_excel(writer, sheet_name="Formulations + Norm Counts", index=False)
-    else: #save dataframe without outliers
-        return df_merged
+            df_merged.to_excel(writer, sheet_name= s_name, index=False)
+    
+    return df_merged
 
-def organize_cell_type(df_norm_counts, sorted_cells):
+def organize_cell_type(df_norm_counts):
     '''
-    organize_cell_type : gets data fram with normalized counts, creates a dataframe without outliers
+    organize_cell_type : gets dataframe with normalized counts, creates a dataframe without outliers
     based on given percentile
         inputs:
-            df_norm_counts :  data frame with normalized counts
-            sorted_cells : user specified list of cells that were sorted
+            df_norm_counts :  dataframe with normalized counts
         output:
             organized_columns : list of samples organized by cell types of sorted cells
     '''
 
-    sample_columns = get_columns(df_norm_counts)
+    organized_columns = get_columns(df_norm_counts)
 
-    # organize columns
-    organized_columns = []
-    for sort_by in sorted_cells:
-        for column in sample_columns:
-            # if current sort_by is in the name of the current column (e.g: if "SB" in "AD SB102")
-            if sort_by in column:
-                organized_columns.append(column)
-
+    organized_columns.sort()
     return organized_columns
 
 def get_columns(dataframe):
