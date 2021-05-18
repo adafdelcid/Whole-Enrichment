@@ -28,6 +28,7 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
         self.tbp = StringVar()  # Top/Bottom Percent
         self.nbc = StringVar()  # number of naked barcodes
         self.snl = StringVar()  # list of samples numbers for experiment
+        self.fid = StringVar()  # file identifier
         # self.op = StringVar()  # Outliers Percentile
 
         Label(master, text="Whole Enrichment Analysis", relief="solid", font=("arial", 16, "bold")).pack()
@@ -58,6 +59,9 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
 
         Label(master, text="List of Sample Numbers", font=("arial", 12, "bold")).place(x=20, y=242)
         Entry(master, textvariable=self.snl).place(x=370, y=240)
+        
+        Label(master, text="File identifier", font=("arial", 12, "bold")).place(x=20, y=274)
+        Entry(master, textvariable=self.fid).place(x=370, y=272)
 
         Button(master, text="ENTER", width=16, fg="blue", font=("arial", 16), command=self.enrichment_analysis).place(
             x=150, y=310)
@@ -172,7 +176,7 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
                                                                                                                y=470)
 
         if not errors:
-            Whole_Enrichment.run_enrichment_analysis(fold_path, self.fsp, self.ncp, cell_types,
+            Whole_Enrichment.run_enrichment_analysis(fold_path, self.fid.get(), self.fsp, self.ncp, cell_types,
                                                                         num_bcs, percent, sample_num_list)
             print("Enrichment analysis performed")
             exit1()
