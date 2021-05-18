@@ -7,7 +7,7 @@ from tkinter import filedialog, Tk, StringVar, Label, Button, Entry
 from os import path
 import sys
 
-import Formulation_Enrichment_by_Cell_Type
+import Whole_Enrichment
 
 
 class MyGUI:  # pylint: disable=too-many-instance-attributes
