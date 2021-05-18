@@ -172,7 +172,7 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
                                                                                                                y=470)
 
         if not errors:
-            Formulation_Enrichment_by_Cell_Type.run_enrichment_analysis(fold_path, self.fsp, self.ncp, cell_types,
+            Whole_Enrichment.run_enrichment_analysis(fold_path, self.fsp, self.ncp, cell_types,
                                                                         num_bcs, percent, sample_num_list)
             print("Enrichment analysis performed")
             exit1()
