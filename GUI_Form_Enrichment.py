@@ -30,7 +30,7 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
         self.snl = StringVar()  # list of samples numbers for experiment
         # self.op = StringVar()  # Outliers Percentile
 
-        Label(master, text="Enrichment Analysis by Cell Type", relief="solid", font=("arial", 16, "bold")).pack()
+        Label(master, text="Whole Enrichment Analysis", relief="solid", font=("arial", 16, "bold")).pack()
 
         Label(master, text="Formulation Sheet File Path", font=("arial", 12, "bold")).place(x=20, y=50)
         Button(master, text="Formulation sheet file", width=20, fg="green", font=("arial", 16),
