@@ -11,7 +11,7 @@ import openpyxl
 pd.options.mode.chained_assignment = None
 
 
-def run_enrichment_analysis(destination_folder, formulations_sheet, csv_filepath, sorted_cells, number_naked_bcs,
+def run_enrichment_analysis(destination_folder, file_id, formulations_sheet, csv_filepath, sorted_cells, number_naked_bcs,
                             x_percent, sample_numbers):
     """
     run_enrichment_analysis : driver function, it uses all other functions to create enrichment analysis
@@ -25,7 +25,7 @@ def run_enrichment_analysis(destination_folder, formulations_sheet, csv_filepath
     sorted_cells.sort()
 
     # create excel destination file
-    destination_file = create_excel_spreadsheet(destination_folder)
+    destination_file = create_excel_spreadsheet(destination_folder, file_id)
 
     # Read formulation sheet and save as dataframe
     df_formulations = create_df_formulation_sheet(formulations_sheet)
@@ -1010,7 +1010,7 @@ def create_df_formulation_sheet(formulations_sheet):
     return df_formulations
 
 
-def create_excel_spreadsheet(destination_folder, file_name="Whole Enrichment Analysis"):
+def create_excel_spreadsheet(destination_folder, file_id, file_name="Whole Enrichment Analysis"):
     """
     create_excel_spreadsheet : creates an excel spreadsheet
         inputs :
@@ -1022,7 +1022,11 @@ def create_excel_spreadsheet(destination_folder, file_name="Whole Enrichment Ana
     if destination_folder[-1] != '/':  # check to save file on correct folder
         destination_folder = destination_folder + '/'
 
-    destination_file = destination_folder + file_name + ".xlsx"
+    if file_id != "":
+        destination_file = destination_folder + file_name + " " + file_id + ".xlsx"
+    else:
+        destination_file = destination_folder + file_name + ".xlsx"
+        
     w_b = Workbook()
     w_b.save(destination_file)
 
