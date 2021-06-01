@@ -7,7 +7,7 @@ from tkinter import filedialog, Tk, StringVar, Label, Button, Entry, OptionMenu
 from os import path
 import sys
 
-import Formulation_Enrichment_by_Cell_Type
+import Whole_Enrichment.py
 
 
 class MyGUI:  # pylint: disable=too-many-instance-attributes
@@ -266,7 +266,7 @@ class MyGUI:  # pylint: disable=too-many-instance-attributes
               font=("arial", 12, "bold")).place(x=20, y=654)
 
         if not errors:
-            Formulation_Enrichment_by_Cell_Type.run_enrichment_analysis(fold_path, self.fid.get(), self.fsp, self.ncp,
+            Whole_Enrichment.run_enrichment_analysis(fold_path, self.fid.get(), self.fsp, self.ncp,
                                                                         cell_types, num_bcs, percent, sample_num_list,
                                                                         r_outlying_mice, r2_threshold, r_runaways,
                                                                         percentile)
