@@ -83,19 +83,24 @@ def run_enrichment_analysis(destination_folder, file_id, formulations_sheet, csv
 
     # divide samples by cell types
     dict_df_avg_cell_type = df_cell_types(df_merged, d_samples_by_cell_type)
-
+    
+    # retrieve list of organs
     list_organs = get_list_organs(sorted_cells)
-
+    
+    # organize samples by organ
     dict_df_organs = df_by_organs(df_merged, sorted_cells, dict_df_avg_cell_type, list_organs)
     df_overall = get_df_overall(dict_df_organs, df_formulations)
 
     # sort normalized counts by overall average
     df_sorted = sort_norm_counts(df_overall, -1)
-
+    
+    # get component information
     dict_components = get_lists_of_components(df_formulations, list_components, number_naked_bcs)
-
+    
+    # dataframes for top and bottom performing LNPs
     df_top, df_bottom = df_top_and_bottom(df_sorted, x_percent, number_naked_bcs)
-
+    
+    # create excel sheets
     create_all_sheet(destination_file, dict_df_organs, df_overall, df_top, df_bottom, dict_components)
     create_cell_type_sheets(destination_file, df_formulations, dict_df_avg_cell_type, dict_components,
                             d_samples_by_cell_type, x_percent, number_naked_bcs)
